@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang= "en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Momshad Hussain</title>
+        <link rel="stylesheet" type="text/css" href="styles/style.css">
+    </head>
+    <body>
+        <div class="todo-container"> 
+            <h1>Momshad's to do List</h1>
+
+            <form id="toDo-form">
+                <div class="todo-cell">
+                    <label>New task:</label>
+                    <input type="text" id="task_name_value" class="input-control" />
+                  </div>
+                
+                  <div class="todo-cell">
+                    <label> Description:</label>
+                    <textarea id="task_description_value"> </textarea>
+                  </div>
+                
+                  <div class="todo-cell">
+                    <label>Importance (0 to 3):</label>
+                    <input type="number" min=0 max=3 id="task_importance_value"/>
+                  </div>
+                
+                  <div class="todo-cell">
+                          <label>Choose category:</label>
+                          <input class="task_category_value" type="radio" name="category" value="school" /><label>School</label>
+                          <input class="task_category_value" type="radio" name="category" value="work" /><label>Work</label>
+                          <input class="task_category_value" type="radio" name="category" value="personal" /><label>Personal</label>
+                  </div>
+          </form>
+
+          <div class="todo-cell">
+            <button onclick="submit()">Post</button>
+          </div>
+        
+
+          <template>
+              <h1 class="taskName"> </h1>
+              <p class="taskDescription"> </p>
+          </template>
+
+
+        <script defer src="scripts/main.js"></script>
+    </body>
+</html>
