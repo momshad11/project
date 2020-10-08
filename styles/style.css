@@ -1,14 +1,25 @@
-.todo-container {
+.todo-container,
+.task-container {
   margin: 20px;
   padding: 20px;
   border: 1px solid gray;
   border-radius: 15px;
 }
 
+.task-container {
+  display: flex;
+}
+
+.task-cell {
+  margin-left: auto;
+  order: 2;
+}
+
 .todo-cell {
   display: flex;
   flex-direction: row;
   margin: 15px;
+  min-width: 7vw !important;
 }
 
 .todo-cell label {
@@ -29,17 +40,33 @@
 button {
   padding: 5px 15px;
   margin: 5px;
-  min-width: 100px
+  min-width: 100px;
 }
 
 #radio label {
-	float: right;
-    display: inline
+  float: right;
+  display: inline;
 }
 radio {
-    display: inline;
+  display: inline;
 }
 #radio input {
-	width: auto;
-	margin-left: 3em;
+  width: auto;
+  margin-left: 3em;
+}
+
+.blue {
+  border-left: 15px solid blue;
+}
+
+.red {
+  border-left: 15px solid red;
+}
+
+.green {
+  border-left: 15px solid green;
+}
+
+.rating {
+  align-items: flex-end;
 }

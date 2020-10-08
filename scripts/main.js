@@ -1,80 +1,116 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", setup)
+document.addEventListener("DOMContentLoaded", setup);
 
 function setup() {
-//    document.getElementById("buttonSubmit").onclick = function () {submit(evt);};
-    loadTodo();
+  document.getElementById("buttonSubmit").onclick = function () {submit();};
+  loadTodo();
 }
 
 function submit() {
-    let toDoItem = {
-        task_name: document.getElementById('task_name_value').value, 
-        task_description: document.getElementById('task_description_value').value,
-        task_importance: document.getElementById('task_importance_value').value,
-        task_category: getCheckedCategory(),
-    };
+  let toDoItem = {
+    task_name: document.getElementById("task_name_value").value,
+    task_description: document.getElementById("task_description_value").value,
+    task_importance: document.getElementById("task_importance_value").value,
+    task_category: getCheckedCategory(),
+  };
 
-    let allTasksSerialized = localStorage.getItem('allTasks') 
-    let allTasksArray;
+  let allTasksSerialized = localStorage.getItem("allTasks");
+  let allTasksArray;
 
-    if(allTasksSerialized){
-        allTasksArray = JSON.parse(allTasksSerialized);
-    }
-    else{
-        allTasksArray = [];
-    }
-
-    allTasksArray.push(toDoItem);
-    localStorage.setItem("allTasks", JSON.stringify(allTasksArray));
-
-
-   showNewTask(toDoItem);
-   return false;
-}
-
-function showNewTask(toDoItem) {
-    debugger;
-    var temp = document.getElementsByTagName("template")[0];
-    var currentTaskTemplate = temp.content.cloneNode(true);
-    currentTaskTemplate.querySelector('taskName').innerHTML = toDoItem.task_name;
-    currentTaskTemplate.querySelector('.taskDescription').innerHTML = toDoItem.task_description;
-    document.body.appendChild(currentTaskTemplate);
+  if (allTasksSerialized) {
+    allTasksArray = JSON.parse(allTasksSerialized);
+  } else {
+    allTasksArray = [];
   }
 
-function getCheckedCategory(){
-    let radioButtonElements = document.getElementsByClassName('task_category_value');
-    for(let i=0; i< radioButtonElements.length; i++)
-    {
-        if(radioButtonElements[i].checked){
-            return radioButtonElements[i].value;
-        }
-    }
+  allTasksArray.push(toDoItem);
+  localStorage.setItem("allTasks", JSON.stringify(allTasksArray));
 
+  showNewTask(toDoItem, allTasksArray.length);
+  return false;
 }
 
-function checkedAction(evt){    // the checkbox of a particular todo being checked:
-    // a. remove the task from the global todo array
-    // b. remove the todo article from the DOM
+function showNewTask(toDoItem, index) {
+  var temp = document.getElementsByTagName("template")[0];
+  var currentTaskTemplate = temp.content.cloneNode(true);
+  currentTaskTemplate.querySelector(".taskName").innerHTML = toDoItem.task_name;
+  currentTaskTemplate.querySelector(".taskDescription").innerHTML =
+    toDoItem.task_description;
+
+  switch (toDoItem.task_category) {
+    case "school":
+        currentTaskTemplate.querySelector(".task-container").classList.add('red');
+      break;
+    case "work":
+        currentTaskTemplate.querySelector(".task-container").classList.add('green');
+      break;
+    case "personal":
+        currentTaskTemplate.querySelector(".task-container").classList.add('blue');
+      break;
+  }
+
+  let numStars = parseInt(toDoItem.task_importance);
+  let starString = '';
+
+  for(let i =0; i < 3; i++)
+  {
+      if(i < numStars){
+        starString += '\u2605';
+      }
+      else{
+        starString += '\u2606';
+      }
+  }
+
+  currentTaskTemplate.querySelector(".rating").innerHTML = starString;
+  currentTaskTemplate.querySelector(".checkedButton").setAttribute('data-itemIndex', index);
+
+  document.body.appendChild(currentTaskTemplate);
 }
 
-function loadTodo(){
-    let allTasksSerialized = localStorage.getItem('allTasks') 
-    let allTasksArray;
-
-    if(allTasksSerialized){
-        allTasksArray = JSON.parse(allTasksSerialized);
+function getCheckedCategory() {
+  let radioButtonElements = document.getElementsByClassName(
+    "task_category_value"
+  );
+  for (let i = 0; i < radioButtonElements.length; i++) {
+    if (radioButtonElements[i].checked) {
+      return radioButtonElements[i].value;
     }
-    else{
-        allTasksArray = [];
+  }
+}
+
+function checkedAction(evt) {
+    let allTasksArray = JSON.parse(localStorage.getItem("allTasks"));
+    let removableIndex = parseInt(evt.getAttribute('data-itemIndex')) === 0 ? 0 : parseInt(evt.getAttribute('data-itemIndex')) - 1;
+    const itemToRemove = allTasksArray.indexOf(allTasksArray[removableIndex]);
+    if (itemToRemove > -1) {
+        allTasksArray.splice(itemToRemove, 1);
     }
 
-    // Update UI
+    localStorage.setItem("allTasks", JSON.stringify(allTasksArray));
+    evt.parentNode.parentNode.parentNode.removeChild(evt.parentNode.parentNode);
+}
 
+function loadTodo() {
+  let allTasksSerialized = localStorage.getItem("allTasks");
+  let allTasksArray;
 
-    // reads from local storage when the page loads, and
-    // initializes the global todo array. It can call the existing function that adds a todo to the DOM to initialize
-    // the page with the todo tasks. 
+  if (allTasksSerialized) {
+    allTasksArray = JSON.parse(allTasksSerialized);
+  } else {
+    allTasksArray = [];
+  }
+
+  if(allTasksArray.length > 0){
+    populateItems(allTasksArray);
+  }
+}
+
+function populateItems(allTasksArray){
+    for(let i=0; i<allTasksArray.length; i++){
+        showNewTask(allTasksArray[i], i);
+    }
 }
 
 /*

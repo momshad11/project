@@ -34,13 +34,27 @@
           </form>
 
           <div class="todo-cell">
-            <button onclick="submit()">Post</button>
+            <button id="buttonSubmit">Post</button>
           </div>
         
 
           <template>
-              <h1 class="taskName"> </h1>
-              <p class="taskDescription"> </p>
+            <div class="task-container"> 
+                <div class="task-cell">
+                  <h1 class="taskName"> </h1>
+                </div>
+
+                <div class="task-cell">
+                  <div class="rating"/>
+                </div>
+
+                <div class="task-cell">
+                  <p class="taskDescription"> </p>
+                </div>
+
+                <input type="button" class="checkedButton" onclick="checkedAction(this)"> </input>
+
+            </div>
           </template>
 
 
